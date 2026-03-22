@@ -77,31 +77,31 @@ canvas{
 }
 
 /* D-pad */
-#dpad{position:relative;width:110px;height:110px;flex-shrink:0;}
+#dpad{position:relative;width:130px;height:130px;flex-shrink:0;}
 .db{
   position:absolute;
   background:#180a18;border:2px solid #3a1a3a;
   display:flex;align-items:center;justify-content:center;
-  color:#cc66cc;font-size:15px;border-radius:4px;
-  width:34px;height:34px;
+  color:#cc66cc;font-size:18px;border-radius:4px;
+  width:42px;height:42px;
   transition:background .06s,transform .06s;
   -webkit-user-select:none;
 }
 .db:active,.db.on{background:#ff69b4;border-color:#ff89d4;color:#000;transform:scale(.93);}
-#bl{left:0;top:38px;}
-#br{right:0;top:38px;}
-#bu{left:38px;top:0;}
-#bd{left:38px;bottom:0;}
+#bl{left:0;top:44px;}
+#br{right:0;top:44px;}
+#bu{left:44px;top:0;}
+#bd{left:44px;bottom:0;}
 #dpad::after{
-  content:'';position:absolute;left:38px;top:38px;
-  width:34px;height:34px;background:#0c050c;
+  content:'';position:absolute;left:44px;top:44px;
+  width:42px;height:42px;background:#0c050c;
   border-radius:50%;border:2px solid #1a0a1a;
 }
 
 /* Action buttons */
 #abtn{display:flex;gap:12px;flex-shrink:0;}
 .ab{
-  width:58px;height:58px;border-radius:50%;
+  width:68px;height:68px;border-radius:50%;
   border:2.5px solid #444;
   display:flex;align-items:center;justify-content:center;
   font-size:7px;color:#eee;background:#180a18;
@@ -300,9 +300,9 @@ document.addEventListener('keyup',function(e){
 
 // ── ENTITY CONFIGS ───────────────────────────────────────
 var CFG={
-  ice: {w:50,h:80,mk:mkIce, def:'walk',spd:1.0,hp:2,atk:'punch',atkRange:55},
-  bum: {w:50,h:80,mk:mkBum, def:'run', spd:1.4,hp:2,atk:'punch',atkRange:55},
-  egg: {w:50,h:80,mk:mkEgg, def:'walk',spd:0.8,hp:2,atk:'punch',atkRange:50},
+  ice: {w:50,h:80,mk:mkIce, def:'walk',spd:0.6,hp:2,atk:'punch',atkRange:40},
+  bum: {w:50,h:80,mk:mkBum, def:'run', spd:0.8,hp:2,atk:'punch',atkRange:40},
+  egg: {w:50,h:80,mk:mkEgg, def:'walk',spd:0.5,hp:2,atk:'punch',atkRange:35},
   cake:{w:70,h:80,mk:mkCake,def:'walk',spd:0.5,hp:6,atk:'slam', atkRange:65,boss:true},
   sleeper:{w:100,h:40,mk:mkSleep,def:'sleep',spd:0,hp:1,obs:true}
 };
@@ -322,7 +322,7 @@ var particles=[];
 
 // ── PLAYER ───────────────────────────────────────────────
 var pl={x:60,y:0,vx:0,vy:0,grnd:true,alive:true,face:1,
-        hp:3,maxHp:3,inv:0,aT:0,aC:0,anims:null,cur:'idle'};
+        hp:10,maxHp:10,inv:0,aT:0,aC:0,anims:null,cur:'idle'};
 
 function resetPl(){
   pl.anims=mkMaria(); pl.cur='idle';
@@ -356,9 +356,9 @@ function gel(id){return document.getElementById(id);}
 // ── ATTACK ───────────────────────────────────────────────
 function doAtk(){
   if(!pl.anims||pl.aC>0)return;
-  pl.aT=18; pl.aC=24; setA('attack');
+  pl.aT=14; pl.aC=18; setA('attack');
   var fw=pl.anims.attack.w(),fh=pl.anims.attack.h();
-  var reach=70;
+  var reach=90;
   var ax=pl.face>0?pl.x+fw*.3:pl.x-reach;
   var ay=pl.y+fh*.1,aw=reach+fw*.4,ah=fh*.8;
   var hit=false,i,en;
@@ -381,7 +381,7 @@ function doAtk(){
 function pHit(){
   if(pl.inv>0)return;
   pl.hp--;
-  pl.inv=70;
+  pl.inv=120;
   shF=8;flF=5;flC='#f00';
   gel('php').style.width=Math.max(0,pl.hp/pl.maxHp*100)+'%';
   if(pl.hp<=0){
@@ -590,7 +590,7 @@ function update(dt){
         if(en.anims[atkAnim].done){
           // Attack finished — cooldown before next attack
           en.cur=walkAnim;
-          en.atkCool=50;
+          en.atkCool=90;
         }
         // Damage window: frame 2 of attack animation
         if(en.anims[atkAnim].fi===2&&!en.hitDealt&&pl.inv<=0&&dist<en.cfg.atkRange+15){
